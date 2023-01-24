@@ -1,7 +1,7 @@
 import React, { useContext } from 'react'
 import styled from 'styled-components'
 import { FlexBox } from '../../../styles'
-import { SelectGroup } from '../../molecules/SelectGroup'
+import { SelectGroup } from '../../molecules'
 import { TableContext } from './store/context'
 import { Actions } from './store/reducer'
 
