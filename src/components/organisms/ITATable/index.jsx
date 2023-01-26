@@ -20,6 +20,7 @@ function Table({
   useEffect(() => {
     dispatch({ type: Actions.SET_DATA, payload: data })
     dispatch({ type: Actions.SET_COLUMNS, payload: columns })
+    dispatch({ type: Actions.SET_SORT_COLUMNS })
   }, [data, columns, dispatch])
 
   return (

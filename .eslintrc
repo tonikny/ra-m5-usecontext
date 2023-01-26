@@ -3,7 +3,7 @@
     "browser": true,
     "node": true
   },
-  "parserOptions": { "ecmaVersion": 6 } ,
+  "parserOptions": { "ecmaVersion": 2020 },
   "extends": ["eslint:recommended", "airbnb", "airbnb/hooks", "prettier"],
   "rules": {
     "react/prop-types": "warn",
@@ -13,7 +13,7 @@
     "no-unsafe-optional-chaining": "warn",
     "no-param-reassign": [
       "error",
-      { "props": true, "ignorePropertyModificationsFor": ["state", "draft"] },
+      { "props": true, "ignorePropertyModificationsFor": ["state", "draft"] }
     ]
   }
 }

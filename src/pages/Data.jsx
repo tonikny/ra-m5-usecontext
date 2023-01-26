@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
+import styled from 'styled-components'
 import { Body } from '../components/layout'
 import { ITATable } from '../components/organisms'
 import { Container, FlexBox } from '../styles'
 import { getAllHouses } from '../store/houses.slice'
-import styled from 'styled-components'
 import { Button } from '../components/atoms'
 import tableType from '../components/organisms/ITATable/constants'
 import exportCSVFile from '../components/organisms/ITATable/helpers/exportToCSV'
@@ -17,7 +17,7 @@ const ButtonBar = styled(FlexBox)`
 function Data() {
   const [mode, setMode] = useState(tableType.LIST_ALL)
   const { reqStatus, houses } = useSelector((state) => state.houses)
-  const { isError, isSuccess, isLoading, hasData } = reqStatus
+  const { isError, isLoading, hasData } = reqStatus
   const { byId, allIds } = houses
   const dispatch = useDispatch()
 
@@ -29,22 +29,32 @@ function Data() {
     {
       id: 'title',
       label: 'Nombre',
+      isHidden: false,
+      sortable: true,
     },
     {
       id: 'type',
       label: 'Tipo',
+      isHidden: false,
+      sortable: true,
     },
     {
       id: 'price',
       label: 'Precio',
+      isHidden: false,
+      sortable: true,
     },
     {
       id: 'district',
       label: 'Barrio',
+      isHidden: false,
+      sortable: true,
     },
     {
       id: 'city',
       label: 'Ciudad',
+      isHidden: false,
+      sortable: true,
     },
   ]
   const data = allIds.map((id) => ({ ...byId[id], id }))
@@ -53,17 +63,23 @@ function Data() {
     {
       id: 'district',
       label: 'Barrio',
+      isHidden: false,
+      sortable: true,
     },
     {
       id: 'houseNum',
       label: 'N. de viviendas',
+      isHidden: false,
+      sortable: true,
     },
     {
       id: 'meanPrice',
       label: 'Precio medio',
+      isHidden: false,
+      sortable: true,
     },
   ]
-  let GroupedData = []
+  const GroupedData = []
   data.forEach((house) => {
     const index = GroupedData.findIndex(
       (item) => item.district === house.district,
