@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState, useMemo, useCallback } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import styled from 'styled-components'
 import { Body } from '../components/layout'
@@ -25,80 +25,95 @@ function Data() {
     dispatch(getAllHouses())
   }, [dispatch])
 
-  const columns = [
-    {
-      id: 'title',
-      label: 'Nombre',
-      isHidden: false,
-      sortable: true,
-    },
-    {
-      id: 'type',
-      label: 'Tipo',
-      isHidden: false,
-      sortable: true,
-    },
-    {
-      id: 'price',
-      label: 'Precio',
-      isHidden: false,
-      sortable: true,
-    },
-    {
-      id: 'district',
-      label: 'Barrio',
-      isHidden: false,
-      sortable: true,
-    },
-    {
-      id: 'city',
-      label: 'Ciudad',
-      isHidden: false,
-      sortable: true,
-    },
-  ]
-  const data = allIds.map((id) => ({ ...byId[id], id }))
+  const columns = useMemo(
+    () => [
+      {
+        id: 'title',
+        label: 'Nombre',
+        isHidden: false,
+        sortable: true,
+      },
+      {
+        id: 'type',
+        label: 'Tipo',
+        isHidden: false,
+        sortable: true,
+      },
+      {
+        id: 'price',
+        label: 'Precio',
+        isHidden: false,
+        sortable: true,
+      },
+      {
+        id: 'district',
+        label: 'Barrio',
+        isHidden: false,
+        sortable: true,
+      },
+      {
+        id: 'city',
+        label: 'Ciudad',
+        isHidden: false,
+        sortable: true,
+      },
+    ],
+    [],
+  )
+  const data = useMemo(
+    () => allIds.map((id) => ({ ...byId[id], id })),
+    [allIds, byId],
+  )
 
-  const columnsByDistrict = [
-    {
-      id: 'district',
-      label: 'Barrio',
-      isHidden: false,
-      sortable: true,
-    },
-    {
-      id: 'houseNum',
-      label: 'N. de viviendas',
-      isHidden: false,
-      sortable: true,
-    },
-    {
-      id: 'meanPrice',
-      label: 'Precio medio',
-      isHidden: false,
-      sortable: true,
-    },
-  ]
-  const GroupedData = []
-  data.forEach((house) => {
-    const index = GroupedData.findIndex(
-      (item) => item.district === house.district,
-    )
-    if (!(index < 0)) {
-      GroupedData[index].count += 1
-      GroupedData[index].sum += house.price
-    } else {
-      GroupedData.push({ district: house.district, count: 1, sum: house.price })
-    }
-  })
-  const dataByDistrict = GroupedData.map((obj) => ({
-    id: obj.district,
-    district: obj.district,
-    houseNum: obj.count,
-    meanPrice: obj.sum / obj.count,
-  }))
+  const columnsByDistrict = useMemo(
+    () => [
+      {
+        id: 'district',
+        label: 'Barrio',
+        isHidden: false,
+        sortable: true,
+      },
+      {
+        id: 'houseNum',
+        label: 'N. de viviendas',
+        isHidden: false,
+        sortable: true,
+      },
+      {
+        id: 'meanPrice',
+        label: 'Precio medio',
+        isHidden: false,
+        sortable: true,
+      },
+    ],
+    [],
+  )
+  const dataByDistrict = useMemo(() => {
+    const GroupedData = []
+    data.forEach((house) => {
+      const index = GroupedData.findIndex(
+        (item) => item.district === house.district,
+      )
+      if (!(index < 0)) {
+        GroupedData[index].count += 1
+        GroupedData[index].sum += house.price
+      } else {
+        GroupedData.push({
+          district: house.district,
+          count: 1,
+          sum: house.price,
+        })
+      }
+    })
+    return GroupedData.map((obj) => ({
+      id: obj.district,
+      district: obj.district,
+      houseNum: obj.count,
+      meanPrice: obj.sum / obj.count,
+    }))
+  }, [data])
 
-  const handleDownload = () => {
+  const handleDownload = useCallback(() => {
     if (mode === tableType.LIST_ALL) {
       exportCSVFile(columns, data, tableType.LIST_ALL, 'tablaViviendas')
     } else if (mode === tableType.BY_DISTRICT) {
@@ -109,7 +124,7 @@ function Data() {
         'tablaPorBarrios',
       )
     }
-  }
+  }, [columns, columnsByDistrict, data, dataByDistrict, mode])
 
   return (
     <Body>

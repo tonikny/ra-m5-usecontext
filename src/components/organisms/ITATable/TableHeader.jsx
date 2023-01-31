@@ -58,4 +58,5 @@ function TableHeader() {
   )
 }
 
-export default TableHeader
+const MemoizedTableHeader = React.memo(TableHeader)
+export default MemoizedTableHeader
